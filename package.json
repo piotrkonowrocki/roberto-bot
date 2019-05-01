@@ -1,0 +1,22 @@
+{
+  "name": "roberto-bot",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piotrkonowrocki/roberto-bot.git"
+  },
+  "author": "Piotr Konowrocki",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/piotrkonowrocki/roberto-bot/issues"
+  },
+  "homepage": "https://github.com/piotrkonowrocki/roberto-bot#readme",
+  "dependencies": {
+    "discord.js": "^11.4.2"
+  }
+}
