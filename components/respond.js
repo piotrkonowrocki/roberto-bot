@@ -20,7 +20,7 @@ class Respond {
             response = '';
             responseArray.forEach((item, i) => {
                 response += item;
-                if (vars[i]) response += vars[i];
+                if (vars[i] && responseArray.length > 1) response += vars[i];
             })
             
         }

@@ -23,8 +23,7 @@ module.exports = class Bot {
         });
 
         this.client.on('message', message => {
-            console.log(moment(message.createdTimestamp).format('HH:mm:ss'));
-            console.log(message.createdAt);
+
             if (message.isMentioned(this.client.user)) {
                 let content = message.content.toLowerCase();
 
@@ -33,9 +32,9 @@ module.exports = class Bot {
                 if (contains(content, ['boost period'])) {
                     this.boostPeriodHandler(message);
                 } else if (contains(content, ['hi', 'hello', 'hey'])) {
-                    message.channel.send(respond.print('genericGreetings'))
+                    message.channel.send(respond.print('genericGreetings', `<@${message.author.id}>`))
                 } else if (contains(content, ['thanks', 'thx', 'thank you', 'good job', 'good bot'])) {
-                    message.channel.send(respond.print('genericThanks'))
+                    message.channel.send(respond.print('genericThanks', `<@${message.author.id}>`))
                 } else if (contains(content, ['what', 'why', 'when', 'who', 'which'])) {
                     message.channel.send(respond.print('genericAnswer'))
                 }
