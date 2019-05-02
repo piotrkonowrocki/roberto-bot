@@ -1,0 +1,9 @@
+{
+  "watch": [
+    "./"
+  ],
+  "ignore": [
+    "logs/*"
+  ],
+  "ext": "js json twig"
+}
