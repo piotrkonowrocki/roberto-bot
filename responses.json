@@ -1,0 +1,15 @@
+{
+    "boostPeriodLoading": "Checking nearest boost period...",
+    "boostPeriodIn": "Next boost is in about {placeholder} at {placeholder} in UTC+{placeholder} timezone.",
+    "boostPeriodNow": "Boost is happening right now, hurry up!",
+    "boostPeriodOff": "Sorry, but it looks like there is no active Extreme Event at this moment.",
+    "genericGreetings": [
+        "Hi!",
+        "Hi, I hope you're having fantastic day!",
+        "Hi, have a nice day!",
+        "Hi, nice to see you here!"
+    ],
+    "genericThanks": "Always happy to help!",
+    "genericAnswer": "Sorry, I'm just a simple bot, I don't know answers to this question :frowning:",
+    "genericErrorMessage": "Sorry! Something went wrong, I can't answer right now. Ask {placeholder} to check what's happend."
+}
