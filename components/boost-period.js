@@ -1,37 +1,28 @@
-const jsdom = require('jsdom');
-const request = require('request-promise-native');
 const moment = require('moment');
 const respond = require('./respond');
+const log = require('../utils/log');
+const getWebsiteContent = require('../utils/get-website-content');
 
-const {JSDOM} = jsdom;
+const settings = require('../settings.json');
 
 module.exports = class BoostPeriod {
-    getWebsiteContent(url) {
-        return new Promise(resolve => {
-            request(url)
-                .then(response => {
-                    let dom = new JSDOM(response);
-
-                    resolve(dom.window.document);
-                });
-        });
-    }
-
-    getNearestBoost(url) {
+    getNearestBoost() {
         return new Promise((resolve, reject) => {
-            this.getWebsiteContent(url)
+            log.print('Starting getting nearest boost period...');
+
+            getWebsiteContent(settings.boostPeriodUrl)
                 .then(document => {
-                    let documentTr = document.querySelector('table tbody tr:first-child');
+                    let dom_firstRow = document.querySelector('table tbody tr:first-child');
 
-                    if (documentTr) {
-                        let documentSpan = documentTr.querySelector('td:nth-child(2) span');
-                        let timeUpcoming = moment(parseInt(documentSpan.getAttribute('data-timestamp'), 10) * 1000);
+                    if (dom_firstRow) {
+                        let dom_timestamp = dom_firstRow.querySelector('td:nth-child(2) span');
+                        let moment_upcoming = moment(parseInt(dom_timestamp.getAttribute('data-timestamp'), 10) * 1000);
+                        let moment_now = moment();
                         let timeZone = moment().utcOffset() / 60;
-                        let timeNow = moment();
 
-                        if (timeUpcoming.isAfter(timeNow)) {
-                            let timeLeft = timeNow.to(timeUpcoming, true);
-                            let hour = timeUpcoming.format('HH:mm');
+                        if (moment_upcoming.isAfter(moment_now)) {
+                            let timeLeft = moment_now.to(moment_upcoming, true);
+                            let hour = moment_upcoming.format('HH:mm');
 
                             resolve(respond.print('boostPeriodIn', [timeLeft, hour, timeZone]));
                         } else {
@@ -39,7 +30,8 @@ module.exports = class BoostPeriod {
                         }
                     } else {
                         resolve(respond.print('boostPeriodOff'));
-                    }
+                    }    
+                    log.print('Finished getting nearest boost period');
                 })
                 .catch(err => {
                     console.log(err);
