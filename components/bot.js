@@ -1,9 +1,10 @@
 const Discord = require('discord.js');
-const log = require('../utils/log');
-const contains = require('../utils/contains');
-const respond = require('./respond');
+const cron = require('node-cron');
 const BoostPeriod = require('./boost-period');
 const Schedule = require('./schedule');
+const respond = require('./respond');
+const log = require('../utils/log');
+const contains = require('../utils/contains');
 
 const token = require('../token.json').token;
 const boostPeriod = new BoostPeriod();
@@ -15,6 +16,7 @@ module.exports = class Bot {
 
         this.client.login(token);
         this.events();
+        this.cron();
     }
 
     events() {
@@ -44,6 +46,12 @@ module.exports = class Bot {
                     message.channel.send(respond.print('genericResponse'));
                 }
             }
+        });
+    }
+
+    cron() {
+        cron.schedule('0 0 0 * * *', () => {
+            console.log(Math.random());
         });
     }
 
