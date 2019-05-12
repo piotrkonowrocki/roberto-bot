@@ -11,33 +11,38 @@ module.exports = class BoostPeriod {
             log.print('Starting getting nearest boost period...');
 
             getWebsiteContent(settings.boostPeriodUrl)
-                .then(document => {
-                    let dom_firstRow = document.querySelector('table tbody tr:first-child');
+                .then(this.parseData.bind(this))
+                .then(resolve)
+                .catch(reject);
+        });
+    }
 
-                    if (dom_firstRow) {
-                        let dom_timestamp = dom_firstRow.querySelector('td:nth-child(2) span');
-                        let moment_upcoming = moment(parseInt(dom_timestamp.getAttribute('data-timestamp'), 10) * 1000);
-                        let moment_now = moment();
-                        let timeZone = moment().utcOffset() / 60;
+    parseData(document) {
+        return new Promise(resolve => {
+            let message = '';
+            let dom_firstRow = document.querySelector('table tbody tr:first-child');
 
-                        if (moment_upcoming.isAfter(moment_now)) {
-                            let timeLeft = moment_now.to(moment_upcoming, true);
-                            let hour = moment_upcoming.format('HH:mm');
+            if (dom_firstRow) {
+                let dom_timestamp = dom_firstRow.querySelector('td:nth-child(2) span');
+                let moment_upcoming = moment(parseInt(dom_timestamp.getAttribute('data-timestamp'), 10) * 1000);
+                let moment_now = moment();
+                let timeZone = moment().utcOffset() / 60;
 
-                            resolve(respond.print('boostPeriodIn', [timeLeft, hour, timeZone]));
-                        } else {
-                            resolve(respond.print('boostPeriodNow'));
-                        }
-                    } else {
-                        resolve(respond.print('boostPeriodOff'));
-                    }    
-                    log.print('Finished getting nearest boost period');
-                })
-                .catch(err => {
-                    console.log(err);
+                if (moment_upcoming.isAfter(moment_now)) {
+                    let timeLeft = moment_now.to(moment_upcoming, true);
+                    let hour = moment_upcoming.format('HH:mm');
 
-                    reject();
-                });
+                    message = respond.print('boostPeriodIn', [timeLeft, hour, timeZone]);
+                } else {
+                    message = respond.print('boostPeriodNow');
+                }
+            } else {
+                message = respond.print('boostPeriodOff');
+            }
+
+            log.print('Finished getting nearest boost period');
+
+            resolve({message: message});
         });
     }
 };

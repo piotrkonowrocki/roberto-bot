@@ -22,11 +22,7 @@ module.exports = class Schedule {
                 .then(this.parseData.bind(this))
                 .then(this.generateMessage.bind(this))
                 .then(resolve)
-                .catch(err => {
-                    console.log(err);
-
-                    reject();
-                });
+                .catch(reject);
         });
     }
 

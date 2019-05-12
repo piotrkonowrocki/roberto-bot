@@ -15,8 +15,12 @@ module.exports = class Bot {
         this.client = new Discord.Client();
 
         this.client.login(token);
-        this.events();
-        this.cron();
+        this.client.once('ready', () => {
+            log.print('Roberto-Bot ready and logged in');
+
+            this.events();
+            this.cron();
+        });
     }
 
     events() {
@@ -56,6 +60,7 @@ module.exports = class Bot {
     }
 
     respondWithError(message) {
+        console.log('respond with error');
         message.channel.send(respond.print('genericErrorMessage', '<@403690997764194325>'));
     }
 
@@ -63,12 +68,12 @@ module.exports = class Bot {
         message.channel.send(respond.print('boostPeriodLoading'));
         boostPeriod.getNearestBoost()
             .then(response => {
-                message.channel.send(response);
+                message.channel.send(response.message);
             })
             .catch(err => {
                 console.log(err);
 
-                this.respondWithError.bind(this, message)
+                this.respondWithError(message)
             });
     }
 
@@ -83,7 +88,7 @@ module.exports = class Bot {
             .catch(err => {
                 console.log(err);
 
-                this.respondWithError.bind(this, message)
+                this.respondWithError(message)
             });
     }
 };
