@@ -12,6 +12,7 @@ const schedule = new Schedule();
 
 module.exports = class Bot {
     constructor() {
+        this.debug = true;
         this.client = new Discord.Client();
 
         this.client.login(token);
@@ -59,8 +60,9 @@ module.exports = class Bot {
         });
     }
 
-    respondWithError(message) {
-        console.log('respond with error');
+    respondWithError(err, message) {
+        log.error('Error occured, unable to respond');
+        log.write(err.stack);
         message.channel.send(respond.print('genericErrorMessage', '<@403690997764194325>'));
     }
 
@@ -70,11 +72,7 @@ module.exports = class Bot {
             .then(response => {
                 message.channel.send(response.message);
             })
-            .catch(err => {
-                console.log(err);
-
-                this.respondWithError(message)
-            });
+            .catch(err => this.respondWithError(err, message));
     }
 
     ssrScheduleHandler(message) {
@@ -85,10 +83,6 @@ module.exports = class Bot {
 
                 message.channel.send(response.message, attachment);
             })
-            .catch(err => {
-                console.log(err);
-
-                this.respondWithError(message)
-            });
+            .catch(err => this.respondWithError(err, message));
     }
 };

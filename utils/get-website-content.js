@@ -16,9 +16,9 @@ module.exports = url => {
                 resolve(dom.window.document);
             })
             .catch(err => {
-                console.log(err);
+                log.error(`Unable to get ${url} url`);
 
-                reject();
+                reject(err);
             })
     });
 };
